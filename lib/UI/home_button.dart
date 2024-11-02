@@ -9,16 +9,14 @@ class Homie extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.cyan,
         title: const Text('The App'),
       ),
-      body: Center(
-        child: Container(
-          color: Colors.blue,
-          child: const Text('Hello World'),
-        ),
-      ),
+      body: const Center(
+          child: Text(
+        'data',
+        textDirection: TextDirection.ltr,
+      )),
     );
   }
 }
-
