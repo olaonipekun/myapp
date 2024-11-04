@@ -1,32 +1,81 @@
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:674950433.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:712365185.
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Homie extends StatelessWidget {
-  const Homie({super.key});
+
+class MyNewApp extends StatelessWidget {
+  const MyNewApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Shared preferences demo',
+      home: MyHomePage(title: 'Shared preferences demo'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCounter();
+  }
+
+  /// Load the initial counter value from persistent storage on start,
+  /// or fallback to 0 if it doesn't exist.
+  Future<void> _loadCounter() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _counter = prefs.getInt('counter') ?? 0;
+    });
+  }
+
+  /// After a click, increment the counter state and
+  /// asynchronously save it to persistent storage.
+  Future<void> _incrementCounter() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _counter = (prefs.getInt('counter') ?? 0) + 1;
+      prefs.setInt('counter', _counter);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.cyan,
-        elevation: 10.0,
-        scrolledUnderElevation: 2.0,
-        //shadowColor: const Color.fromARGB(31, 20, 20, 20),
-        centerTitle: true,
-        actions: const <Widget>[
-            IconButton(onPressed: null, icon: Icon(Icons.home))
-          ],
-        leading: const Icon(Icons.menu),
-        title: const Text('The App', style: TextStyle(
-          fontWeight: FontWeight.bold),),
-           
+        title: Text(widget.title),
       ),
-      body: const Center(
-          child: Text(
-        'Data stated here',
-        textDirection: TextDirection.ltr,
-      )),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'You have pushed the button this many times: ',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

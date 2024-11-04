@@ -1,24 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CurrencyConverter extends StatelessWidget {
-  const CurrencyConverter({super.key});
+class SignInScreen extends StatelessWidget {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  SignInScreen({super.key});
+
+  Future<void> signIn(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    String username = usernameController.text;
+    String password = passwordController.text;
+
+    if (username.isNotEmpty && password.isNotEmpty) {
+      // Mark user as signed in
+      await prefs.setBool('isLoggedIn', true);
+
+      // Navigate to HomeScreen
+      Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:545197092.
+    return Scaffold(
+      appBar: AppBar(title: const Text("Sign In"),
+      backgroundColor: Colors.blueGrey,
+      elevation: 16.0,),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            TextField(
+              controller: usernameController,
+              decoration: const InputDecoration(labelText: "Username"),
+            ),
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(labelText: "Password"),
+              obscureText: true,
+            ),
+            ElevatedButton(
+              onPressed: () => signIn(context),
+              child: const Text("Sign In"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  Future<void> signOut(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', false);
+
+    // Navigate back to the SignInScreen
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SignInScreen()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Currency Converter'),
-        centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 188, 233, 197),
-        elevation: 6.4,
-        shadowColor: const Color.fromARGB(31, 29, 28, 28),
+        title: const Text("Home"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => signOut(context),
+          ),
+        ],
       ),
       body: const Center(
-        child: Text(
-          'Data stated here',
-          textDirection: TextDirection.ltr,
-        ),
+        child: Text("Welcome to the Home Screen!"),
       ),
     );
   }
