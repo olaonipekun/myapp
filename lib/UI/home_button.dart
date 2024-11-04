@@ -10,11 +10,21 @@ class Homie extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan,
-        title: const Text('The App'),
+        elevation: 10.0,
+        scrolledUnderElevation: 2.0,
+        //shadowColor: const Color.fromARGB(31, 20, 20, 20),
+        centerTitle: true,
+        actions: const <Widget>[
+            IconButton(onPressed: null, icon: Icon(Icons.home))
+          ],
+        leading: const Icon(Icons.menu),
+        title: const Text('The App', style: TextStyle(
+          fontWeight: FontWeight.bold),),
+           
       ),
       body: const Center(
           child: Text(
-        'data',
+        'Data stated here',
         textDirection: TextDirection.ltr,
       )),
     );
