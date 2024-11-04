@@ -32,11 +32,12 @@ class SignInScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Sign In"),
       backgroundColor: Colors.blueGrey,
       elevation: 16.0,),
+      backgroundColor: const Color.fromARGB(255, 236, 241, 244),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(30.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: usernameController,
